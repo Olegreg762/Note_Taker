@@ -5,9 +5,8 @@ const {v4 : uuidv4} = require("uuid");
 const router = express.Router();
 
 const notes_path = "../db/db.json";
-let notes_db = JSON.parse(
-    fs.readFileSync(path.join(__dirname, notes_path))
-)
+let notes_db = JSON.parse(fs.readFileSync(path.join(__dirname, notes_path)))
+
 
 
 ////// ## HTML Routing ## ////// 
@@ -32,8 +31,14 @@ router.post("/api/notes",(req,res)=>{
         id: uuidv4()
     }
     notes_db.push(new_note);
-    fs.writeFileSync(path.join(__dirname, notes_path),
-    JSON.stringify(notes_db));
+    fs.writeFileSync(path.join(__dirname, notes_path),JSON.stringify(notes_db));
+    res.json(new_note);
 });
 
+router.delete("/api/notes/:id", (req,res)=>{
+    const note_id = req.params.id;
+    notes_db = notes_db.filter((note)=> note.id !== note_id);
+    fs.writeFileSync(path.join(__dirname, notes_path), JSON.stringify(notes_db));
+    res.json(notes_db);
+});
 module.exports = router;

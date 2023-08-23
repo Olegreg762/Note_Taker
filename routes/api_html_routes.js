@@ -7,17 +7,6 @@ const router = express.Router();
 const notes_path = "../db/db.json";
 let notes_db = JSON.parse(fs.readFileSync(path.join(__dirname, notes_path)))
 
-
-
-////// ## HTML Routing ## ////// 
-
-router.get("/notes",(req,res)=>{
-    res.sendFile(path.join(__dirname, "../public/notes.html"));
-});
-router.get("/",(req,res)=>{
-    res.sendFile(path.join(__dirname, "../public/index.html"));
-});
-
 ////// ## API Routing ## ////// 
 
 router.get("/api/notes",(req,res)=>{
@@ -40,5 +29,16 @@ router.delete("/api/notes/:id", (req,res)=>{
     notes_db = notes_db.filter((note)=> note.id !== note_id);
     fs.writeFileSync(path.join(__dirname, notes_path), JSON.stringify(notes_db));
     res.json(notes_db);
+});
+
+////// ## HTML Routing ## ////// 
+
+router.get("/notes",(req,res)=>{
+    res.sendFile(path.join(__dirname, "../public/notes.html"));
+});
+
+
+router.get("*",(req,res)=>{
+    res.sendFile(path.join(__dirname, "../public/index.html"));
 });
 module.exports = router;
